@@ -1,0 +1,46 @@
+---
+- name: create user group
+  group: name={{selenium_group}} state=present
+  sudo: true
+
+- name: create user seluser
+  user: name={{selenium_user}} comment="Selenium User" group={{selenium_group}} groups="wheel"
+  sudo: true
+
+- name: installing RHEL EPEL repo
+  yum: name=epel-release
+  sudo: true
+
+- name: ensure firewalld is running
+  service: name=firewalld state=started enabled=yes
+  sudo: true
+
+- name: installing OpenJDK
+  yum: name=java-{{java_version}}-openjdk.x86_64
+  sudo: true
+
+- name: update tzdata-java
+  yum: name=tzdata-java
+  sudo: true
+
+- name: installing unzip
+  yum: name=unzip
+  sudo: true
+
+- name: create selenium directory
+  file: path={{selenium_home}}/selenium state=directory owner={{selenium_user}}
+  sudo: true
+
+- name: add $SELENIUM_HOME in /etc/profile.d for all users
+  template: src=custom.sh.j2 dest=/etc/profile.d/custom.sh mode=0755
+  sudo: true
+
+- name: download selenium binaries
+  get_url: url=http://selenium-release.storage.googleapis.com/{{selenium_version | regex_replace('\\.[0-9]+$', '') }}/selenium-server-standalone-{{selenium_version}}.jar dest={{selenium_home}}/selenium/selenium-server-standalone-{{selenium_version}}.jar
+  sudo: true
+
+- name: Disable requiretty property in /etc/sudoers
+  replace: dest=/etc/sudoers
+           regexp='^Defaults    requiretty'
+           replace='Defaults    !requiretty'
+  sudo: true

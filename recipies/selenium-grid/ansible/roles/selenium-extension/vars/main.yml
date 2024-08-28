@@ -1,0 +1,26 @@
+---
+nexus_url: https://arm101-eiffel004.lmera.ericsson.se:8443
+nexus_repository: public
+
+sterodium_group: io.sterodium
+sterodium_version: 0.6
+internal_sterodium_group: com.ericsson.cifwk
+internal_sterodium_version: 1.124
+
+common_extensions:
+  - name: grid-starter
+    group: "{{internal_sterodium_group}}"
+    version: "{{internal_sterodium_version}}"
+  - name: selenium-log4j
+    group: "{{internal_sterodium_group}}"
+    version: "{{internal_sterodium_version}}"
+
+hub_extensions:
+  - name: extension-proxy
+    group: "{{internal_sterodium_group}}"
+    version: "{{internal_sterodium_version}}"
+
+node_extensions:
+  - name: all-node-extensions
+    group: "{{internal_sterodium_group}}"
+    version: "{{internal_sterodium_version}}"

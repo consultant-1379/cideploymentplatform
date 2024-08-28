@@ -1,0 +1,16 @@
+# This playbook installs latest released (or selected) version of Selenium grid extensions jar files for hub and nodes.
+# Extension jar files that are already installed are deleted.
+---
+- name: Selenium Hub Extensions
+  hosts: selenium-hub
+  remote_user: "{{ remote_user }}"
+  roles:
+    - role: selenium-extension
+      selenium_extension_type: hub
+
+- name: Selenium Node Extensions
+  hosts: selenium-nodes
+  remote_user: "{{ remote_user }}"
+  roles:
+    - role: selenium-extension
+      selenium_extension_type: node

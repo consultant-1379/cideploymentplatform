@@ -1,0 +1,29 @@
+---
+# This script installs x11vnc server to /usr/local/bin/ from sources.
+# Latest version to date is 0.9.14. Previous installed x11vnc package is removed.
+
+- name: remove any previously installed x11vnc
+  yum: name=x11vnc state=absent
+
+- name: install x11vnc build dependencies
+  yum: name={{item}}
+  with_items:
+    - libX11-devel
+    - libXtst-devel
+    - libjpeg-devel
+
+#- name: download x11vnc
+#  get_url: url=http://x11vnc.sourceforge.net/dev/x11vnc-{{x11vnc_version}}-dev.tar.gz dest=/tmp
+
+- name: copy and unarchive x11vnc
+  unarchive: src=x11vnc-{{x11vnc_version}}-dev.tar.gz dest=/tmp copy=yes creates=/tmp/x11vnc-{{x11vnc_version}}
+
+- name: install x11vnc
+  command: "{{ item }}"
+  args:
+    chdir: "/tmp/x11vnc-{{x11vnc_version}}"
+    creates: /usr/local/bin/x11vnc
+  with_items:
+    - ./configure
+    - "/usr/bin/make install"
+

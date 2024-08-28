@@ -1,0 +1,19 @@
+---
+- name: restart-firewall
+  shell: firewall-cmd --reload
+  sudo: true
+
+- name: restart-selenium-hub
+  service: name=selenium-hub state=restarted enabled=yes
+  sudo: true
+
+- name: restart-selenium-node
+  shell: systemctl list-units | grep -Po 'selenium-node.*(?=\.service.+running)'
+  register: selenium_node_service_instances
+  notify: restart-running-selenium-node-instances
+  sudo: true
+
+- name: restart-running-selenium-node-instances
+  service: name={{item}} state=restarted enabled=yes
+  with_items: selenium_node_service_instances.stdout_lines
+  sudo: true

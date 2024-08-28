@@ -1,0 +1,14 @@
+---
+- name: x11 server
+  hosts: selenium-nodes
+  remote_user: "{{ remote_user }}"
+  sudo: yes
+  roles:
+    - role: selenium-x11
+  tasks:
+    - name: trigger restart of selenium nodes
+      command: echo "restarting selenium nodes"
+      notify:
+        - restart-selenium-node
+  handlers:
+    - include: roles/selenium-common/handlers/main.yml

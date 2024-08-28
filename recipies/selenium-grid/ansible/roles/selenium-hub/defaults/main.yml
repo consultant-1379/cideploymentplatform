@@ -1,0 +1,3 @@
+---
+selenium_hub_host: "{{selenium_hub_host}}"
+selenium_hub_port: 4444

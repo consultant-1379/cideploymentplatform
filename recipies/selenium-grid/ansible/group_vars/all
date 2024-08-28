@@ -1,0 +1,8 @@
+selenium_group: seluser
+selenium_user: seluser
+selenium_home: /home/{{selenium_user}}
+selenium_extension_dir: "{{selenium_home}}/extension"
+
+vnc_port: 5900
+vnc_password: secret
+

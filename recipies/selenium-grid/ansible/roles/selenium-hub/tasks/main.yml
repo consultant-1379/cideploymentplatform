@@ -1,0 +1,25 @@
+---
+- name: install service start script
+  template: src=start-selenium-hub.sh.j2 dest={{selenium_home}}/start-selenium-hub.sh owner={{selenium_user}} group={{selenium_group}} mode=0755
+  sudo: true
+  
+- name: install hub json config
+  template: src=hub.json.j2 dest={{selenium_home}}/hub.json owner=root group=root mode=0666
+  sudo: true
+
+- name: install systemd config
+  template: src=selenium-hub.service.j2 dest=/etc/systemd/system/selenium-hub.service owner=root group=root mode=0666
+  sudo: true
+
+- name: systemctl daemon-reload
+  command: systemctl daemon-reload
+  sudo: true
+
+- name: start selenium-hub service
+  service: name=selenium-hub state=restarted enabled=yes
+  sudo: true
+
+- name: open hub port
+  firewalld: port={{selenium_hub_port}}/tcp permanent=true state=enabled
+  sudo: true
+  notify: restart-firewall

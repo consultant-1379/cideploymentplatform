@@ -1,0 +1,40 @@
+#!/bin/bash
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+NODE_ID=${1:-1}
+DISPLAY_NUMBER=$((10 + $NODE_ID))
+
+. {{selenium_home}}/set-display.sh $DISPLAY_NUMBER
+echo "DISPLAY set to: $DISPLAY"
+
+function shutdown {
+  kill -s SIGTERM $NODE_PID
+  wait $NODE_PID
+}
+
+sudo -H -E -i -u {{selenium_user}} \
+  xvfb-run --server-args="$DISPLAY -screen 0 $GEOMETRY -ac +extension RANDR" \
+  {{selenium_home}}/start-selenium-node.sh $NODE_ID $DISPLAY &
+NODE_PID=$!
+
+trap shutdown SIGTERM SIGINT
+for i in $(seq 1 10)
+do
+  xdpyinfo -display $DISPLAY >/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    break
+  fi
+  echo Waiting xvfb...
+  sleep 0.5
+done
+
+sudo -H -E -i -u {{selenium_user}} openbox-session &
+
+# -usepw
+sudo -H -E -i -u {{selenium_user}} \
+  PATH=$PATH \
+  DISPLAY=$DISPLAY \
+  x11vnc -forever -shared -rfbport $(({{vnc_port}} + $NODE_ID - 1)) -display $DISPLAY &
+
+wait $NODE_PID

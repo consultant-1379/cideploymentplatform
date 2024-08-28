@@ -1,0 +1,15 @@
+<assembly>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <fileSets>
+        <fileSet>
+            <directory>ansible</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+            <outputDirectory>ansible</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

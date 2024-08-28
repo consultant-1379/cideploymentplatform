@@ -1,0 +1,10 @@
+---
+- name: Selenium Hub
+  hosts: selenium-hub
+  remote_user: "{{ remote_user }}"
+  sudo: yes
+  roles:
+    - role: selenium-common
+    - role: selenium-extension
+      selenium_extension_type: hub
+    - role: selenium-hub

@@ -1,0 +1,49 @@
+---
+- name: installing kubernetes-master
+  yum: name=kubernetes-master
+  sudo: true
+
+- name: installing etcd
+  yum: name=etcd
+  sudo: true
+
+- name: install etcd config
+  template: src=etcd.conf.j2 dest=/etc/etcd/etcd.conf owner=root group=root mode=0666
+  sudo: true
+
+- name: install apiserver config
+  template: src=apiserver.j2 dest=/etc/kubernetes/apiserver owner=root group=root mode=0666
+  sudo: true
+
+- name: start etcd service
+  service: name=etcd state=restarted enabled=yes
+  sudo: true
+
+- name: start kube-apiserver service
+  service: name=kube-apiserver state=restarted enabled=yes
+  sudo: true
+
+- name: start kube-controller-manager service
+  service: name=kube-controller-manager state=restarted enabled=yes
+  sudo: true
+
+- name: start kube-scheduler service
+  service: name=kube-scheduler state=restarted enabled=yes
+  sudo: true
+
+- name: Open firewalld port for etcd
+  firewalld: port=4001/tcp permanent=false state=enabled
+  # in case this is also a minion where firewalld turned off
+  ignore_errors: yes
+
+- name: Save firewalld port for etcd
+  firewalld: port=4001/tcp permanent=true state=enabled
+  # in case this is also a minion where firewalld turned off
+  ignore_errors: yes
+
+- name: systemctl daemon-reload
+  command: etcdctl mk /coreos.com/network/config '{"Network":"172.17.0.0/16"}'
+  sudo: true
+  # ignore if key is already set
+  ignore_errors: yes
+

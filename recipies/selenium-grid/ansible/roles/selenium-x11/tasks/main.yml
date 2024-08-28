@@ -1,0 +1,36 @@
+---
+- name: copy script
+  template: src="set-display.sh" dest="{{selenium_home}}/set-display.sh" mode=0755
+  sudo: true
+
+- name: install virtual frame buffers
+  yum: name=xorg-x11-server-Xvfb
+  sudo: true
+
+- name: install x11 utils
+  yum: name=xorg-x11-server-utils
+  sudo: true
+
+- name: install openbox x11
+  yum: name=openbox
+  sudo: true
+
+- name: create .vnc directory
+  file: path=/home/{{selenium_user}}/.vnc state=directory owner={{selenium_user}}
+  sudo: true
+
+- name: generate password for vnc
+  command: x11vnc -storepasswd {{vnc_password}} /home/{{selenium_user}}/.vnc/passwd
+  args:
+    creates: /home/{{selenium_user}}/.vnc/passwd
+  environment:
+    PATH: /usr/local/bin:{{ ansible_env.PATH }}
+  sudo: true
+
+- name: install x11 run script
+  template: src=start-x11-node.sh.j2 dest={{selenium_home}}/start-x11-node.sh owner={{selenium_user}} group={{selenium_group}} mode=0755
+  sudo: true
+
+- name: install systemd config
+  template: src=selenium-node@.service.j2 dest=/etc/systemd/system/selenium-node@.service owner=root group=root mode=0755
+  sudo: true

@@ -1,0 +1,1 @@
+This is a simplest container possible to demonstrate CI Deployment platform end-to-end flow.

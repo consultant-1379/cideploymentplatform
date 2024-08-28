@@ -1,0 +1,29 @@
+{
+  "capabilities":
+      [
+{% for driver in drivers %}
+        {
+          "browserName": {{driver.browser_name}},
+          "maxInstances": {{driver.max_instances}},
+          "extension.sikuliCapability": {{driver.sikuli_capability}}
+        }{% if not loop.last %},{% endif %}
+{% endfor %}
+      ],
+      "host":{{selenium_node_host}},
+      "port":{{selenium_node_port + selenium_node_id - 1}},
+      "cleanUpCycle":{{clean_up_cycle}},
+      "timeout":{{timeout}},
+      "register": {{register_param}},
+      "registerCycle": {{register_cycle}},
+      "browserTimeout":{{browser_timeout}},
+      "hubHost":{{selenium_hub_host}},
+      "hubPort":{{selenium_hub_port}},
+      "proxy":"{{proxy}}",
+      "maxSession":{{max_session}},
+      "registerCycle":{{register_cycle}},
+      "nodePolling":{{node_polling}},
+      "unregisterIfStillDownAfter":{{unregister_if_still_down_after}},
+      "downPollingLimit":{{down_polling_limit}},
+      "nodeStatusCheckTimeout":{{node_status_check_timeout}},
+      "servlets":["{{servlets}}"]
+}

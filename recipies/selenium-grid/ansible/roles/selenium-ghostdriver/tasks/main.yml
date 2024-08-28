@@ -1,0 +1,32 @@
+---
+- name: unpack phantomjs
+  unarchive: src=phantomjs.zip dest={{selenium_home}} mode=0755
+  sudo: true
+
+- name: copy phantomjs json config
+  template: src=ghostconfig.json.j2 dest={{selenium_home}}/ghostconfig.json owner=root group=root mode=0666
+  sudo: true
+
+- name: installing libicu dependency
+  yum: name=libicu
+  sudo: true
+
+- name: install phantomjs start script
+  template: src=phantomjs.sh.j2 dest={{selenium_home}}/phantomjs.sh owner={{selenium_user}} group={{selenium_group}} mode=0755
+  sudo: true
+
+- name: open webdriver ports
+  firewalld: port={{webdriver_port}}-{{webdriver_port + max_instances - 1}}/tcp permanent=true state=enabled
+  sudo: true
+
+- name: install systemd config
+  template: src=phantomjs.service.j2 dest=/etc/systemd/system/phantomjs.service owner=root group=root mode=0666
+  sudo: true
+
+- name: systemctl daemon-reload
+  command: systemctl daemon-reload
+  sudo: true
+
+- name: start phantomjs service
+  service: name=phantomjs state=restarted enabled=yes
+  sudo: true

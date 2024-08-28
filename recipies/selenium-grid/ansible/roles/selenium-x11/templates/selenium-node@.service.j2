@@ -1,0 +1,12 @@
+[Unit]
+Description=Selenium Grid Node %i
+After=network.target
+
+[Service]
+ExecStart={{selenium_home}}/start-x11-node.sh %i
+User={{selenium_user}}
+Group={{selenium_group}}
+WorkingDirectory={{selenium_home}}
+
+[Install]
+WantedBy=multi-user.target

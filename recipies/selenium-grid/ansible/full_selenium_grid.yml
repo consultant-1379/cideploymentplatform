@@ -1,0 +1,3 @@
+---
+- include: selenium_hub.yml
+- include: selenium_node.yml

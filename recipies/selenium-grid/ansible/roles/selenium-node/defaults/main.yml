@@ -1,0 +1,9 @@
+---
+selenium_hub_host: "{{selenium_hub_host}}"
+selenium_hub_port: 4444
+
+selenium_node_host: "{{inventory_hostname}}"
+selenium_node_port: 5555
+
+selenium_node_id: 1
+

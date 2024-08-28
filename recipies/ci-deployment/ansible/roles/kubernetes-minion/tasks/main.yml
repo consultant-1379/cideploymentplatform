@@ -1,0 +1,40 @@
+---
+- name: installing kubernetes-node
+  yum: name=kubernetes-node
+  sudo: true
+
+- name: installing kubernetes-node
+  yum: name=flannel
+  sudo: true
+
+- name: write flannel config
+  template: src=flanneld.j2 dest=/etc/sysconfig/flanneld owner=root group=root mode=0666
+  sudo: true
+
+- name: write kubernetes config
+  template: src=config.j2 dest=/etc/kubernetes/config owner=root group=root mode=0666
+  sudo: true
+
+- name: write kubernetes config
+  template: src=kubelet.j2 dest=/etc/kubernetes/kubelet owner=root group=root mode=0666
+  sudo: true
+
+- name: stop firewalld service
+  service: name=firewalld state=stopped enabled=no
+  sudo: true
+
+- name: start kube-proxy service
+  service: name=kube-proxy.service state=restarted enabled=yes
+  sudo: true
+
+- name: start kubelet service
+  service: name=kubelet.service state=restarted enabled=yes
+  sudo: true
+
+- name: start docker service
+  service: name=docker state=restarted enabled=yes
+  sudo: true
+
+- name: start flanneld service
+  service: name=flanneld state=restarted enabled=yes
+  sudo: true

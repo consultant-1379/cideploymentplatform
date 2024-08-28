@@ -1,0 +1,14 @@
+[selenium-hub]
+141.137.235.211
+
+[selenium-nodes]
+141.137.235.212
+141.137.235.213
+[selenium-nodes:vars]
+selenium_hub_host=141.137.235.211
+
+[hosts:children]
+selenium-hub
+selenium-nodes
+[hosts:vars]
+remote_user=root

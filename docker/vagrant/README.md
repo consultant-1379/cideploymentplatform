@@ -1,0 +1,1 @@
+Vagrant box for building Docker images on Windows

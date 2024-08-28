@@ -1,0 +1,13 @@
+[selenium-hub]
+127.0.0.1
+
+[selenium-nodes]
+127.0.0.1
+[selenium-nodes:vars]
+selenium_hub_host=localhost
+
+[hosts:children]
+selenium-hub
+selenium-nodes
+[hosts:vars]
+remote_user=vagrant

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+{% for shift in range(0, max_instances) %}
+{% set port = webdriver_port + shift %}
+echo "Starting phantomjs on port: {{port}}"
+{{selenium_home}}/phantomjs \
+  --webdriver={{port}} \
+  --webdriver-selenium-grid-hub=http://{{selenium_hub_host}}:{{selenium_hub_port}} \
+  --config={{selenium_home}}/ghostconfig.json \
+{% if not loop.last %}
+  &
+{% endif %}
+{% endfor %}

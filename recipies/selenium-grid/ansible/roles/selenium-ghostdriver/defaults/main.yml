@@ -1,0 +1,7 @@
+---
+selenium_hub_host: "{{selenium_hub_host}}"
+selenium_hub_port: 4444
+
+webdriver_port: 8080
+
+max_instances: 1

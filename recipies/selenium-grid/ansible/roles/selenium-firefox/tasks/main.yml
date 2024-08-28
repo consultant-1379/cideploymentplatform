@@ -1,0 +1,55 @@
+---
+- name: Download Firefox ESR
+  shell: wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/{{firefox_version}}/linux-x86_64/en-GB/firefox-{{firefox_version}}.tar.bz2
+
+- name: Unzip Firefox ESR
+  shell: tar -xvf firefox-{{firefox_version}}.tar.bz2 -C /tmp
+  sudo: true
+
+- name: Remove Firefox tar file
+  shell: rm -rf firefox-{{firefox_version}}.tar.bz2
+  sudo: true
+
+- name: Remove old Firefox
+  shell: rm -rf /opt/firefox
+  sudo: true
+
+- name: Create directory /opt/firefox
+  shell: mkdir /opt/firefox
+  sudo: true
+  ignore_errors: yes
+
+- name: Copy new version to /opt/firefox
+  shell: mv /tmp/firefox /opt/firefox
+  sudo: true
+
+- name: Create sybolic link from /usr/bin/firefox to /opt/firefox/firefox/firefox
+  shell: ln -s /opt/firefox/firefox/firefox /usr/bin/firefox
+  sudo: true
+  ignore_errors: yes
+
+
+
+- name: Download geckodriver
+  shell: wget https://github.com/mozilla/geckodriver/releases/download/v{{geckodriver_version}}/geckodriver-v{{geckodriver_version}}-linux64.tar.gz
+
+- name: Unzip geckodriver
+  shell: tar -xvzf geckodriver-v{{geckodriver_version}}-linux64.tar.gz -C /tmp
+  sudo: true
+
+- name: Remove geckodriver tar file
+  shell: rm -rf geckodriver-v{{geckodriver_version}}-linux64.tar.gz
+  sudo: true
+
+- name: Remove old geckodriver
+  shell: rm -rf /opt/geckodriver
+  sudo: true
+
+- name: Copy new version to /opt/geckodriver
+  shell: mv /tmp/geckodriver /opt/
+  sudo: true
+
+- name: Create symbolic link from /usr/bin/geckodriver to /opt/geckodriver/geckodriver
+  shell: ln -s /opt/geckodriver /usr/bin/geckodriver
+  sudo: true
+  ignore_errors: true

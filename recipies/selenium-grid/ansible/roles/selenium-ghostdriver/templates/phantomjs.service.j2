@@ -1,0 +1,15 @@
+[Unit]
+Description=PhantomJS
+After=network.target
+Requires=selenium-hub.service
+
+[Service]
+ExecStart={{selenium_home}}/phantomjs.sh
+User={{selenium_user}}
+Group={{selenium_group}}
+WorkingDirectory={{selenium_home}}
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

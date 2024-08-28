@@ -1,0 +1,18 @@
+#!/bin/bash
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+JAVA_BIN=/usr/bin/java
+JAVA_OPTS="-Xms64m -Xmx128m -server"
+
+SELENIUM_DIR={{selenium_home}}/selenium
+EXTENSION_DIR={{selenium_extension_dir}}
+SELENIUM_JAR_FILE="$SELENIUM_DIR/selenium-server-standalone-{{selenium_version}}.jar"
+SELENIUM_JAR_FILES="$EXTENSION_DIR:$SELENIUM_JAR_FILE:$EXTENSION_DIR/*"
+CLASS_TO_RUN="com.ericsson.taf.selenium.GridStarter"
+SELENIUM_LOG_FILE="$SELENIUM_DIR/selenium.log"
+SELENIUM_DAEMON_OPTS=" -client -cp $SELENIUM_JAR_FILES $CLASS_TO_RUN -log $SELENIUM_LOG_FILE"
+
+SELENIUM_CMD="$JAVA_BIN $JAVA_OPTS -cp $SELENIUM_JAR_FILES $CLASS_TO_RUN -log $SELENIUM_LOG_FILE -role hub"
+
+$SELENIUM_CMD -hubConfig {{selenium_home}}/hub.json

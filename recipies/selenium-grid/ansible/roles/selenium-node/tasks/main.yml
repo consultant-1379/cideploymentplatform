@@ -1,0 +1,26 @@
+---
+- name: install service start script
+  template: src=start-selenium-node.sh.j2 dest={{selenium_home}}/start-selenium-node.sh owner={{selenium_user}} group={{selenium_group}} mode=0755
+  sudo: true
+  
+- name: install node json config
+  template: src=node.json.j2 dest={{selenium_home}}/node-{{selenium_node_id}}.json owner=root group=root mode=0666
+  sudo: true
+
+- name: systemctl daemon-reload
+  command: systemctl daemon-reload
+  sudo: true
+
+- name: start selenium-node service
+  service: name=selenium-node@{{selenium_node_id}} state=restarted enabled=yes
+  sudo: true
+
+- name: open node port
+  firewalld: port={{selenium_node_port + selenium_node_id - 1}}/tcp permanent=true state=enabled
+  sudo: true
+  notify: restart-firewall
+
+- name: open vnc port
+  firewalld: port={{vnc_port + selenium_node_id - 1}}/tcp permanent=true state=enabled
+  sudo: true
+  notify: restart-firewall

@@ -1,0 +1,46 @@
+---
+- name: create extension directory
+  file: path={{selenium_extension_dir}} state=directory owner={{selenium_user}} mode=0755
+  sudo: true
+
+- name: select extensions by server type
+  set_fact:
+    selenium_extensions: "{{ hub_extensions if selenium_extension_type == \"hub\" else node_extensions }}"
+
+- name: merge with common extension list
+  set_fact:
+    selenium_extensions: "{{ common_extensions + selenium_extensions }}"
+
+- debug: var=selenium_extensions
+
+- name: download extension jar from nexus
+  get_url:
+      url: "{{nexus_url}}/nexus/service/local/artifact/maven/redirect?\
+        r={{nexus_repository}}\
+        &g={{item.group}}\
+        &a={{item.name}}\
+        &v={{item.version}}"
+      dest: "{{selenium_extension_dir}}/{{item.name}}-{{item.version}}.jar"
+  with_items: "{{selenium_extensions}}"
+  sudo: true
+
+- name: remove any obsolete jar files
+  shell: >
+    find {{selenium_extension_dir}} -type f -regex ".*/{{item.name}}-[\.0-9]+\.jar"
+    | grep -Pv '.*/{{item.name}}-{{item.version}}\.jar$'
+    | xargs --no-run-if-empty rm
+  with_items: "{{selenium_extensions}}"
+  sudo: true
+
+- name: set file permissions
+  file: >
+    path={{selenium_extension_dir}}/{{item.name}}-{{item.version}}.jar
+    owner={{selenium_user}}
+    group={{selenium_group}}
+    mode=0644
+  with_items: "{{selenium_extensions}}"
+  notify:
+    - restart-selenium-{{selenium_extension_type}}
+  sudo: true
+
+

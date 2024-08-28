@@ -1,0 +1,15 @@
+---
+clean_up_cycle: 2000
+timeout: 30000
+browser_timeout: 60000
+max_session: 1
+node_polling: 2000
+unregister_if_still_down_after: 60000
+down_polling_limit: 10
+node_status_check_timeout: 10000
+proxy: "org.openqa.grid.selenium.proxy.DefaultRemoteProxy"
+register_param: true
+register_cycle: 5000
+servlets: "com.ericsson.taf.selenium.node.sikuli.SikuliExtensionServlet,\
+           com.ericsson.taf.selenium.node.upload.FileUploadServlet,\
+           com.ericsson.taf.selenium.node.download.FileDownloadServlet"

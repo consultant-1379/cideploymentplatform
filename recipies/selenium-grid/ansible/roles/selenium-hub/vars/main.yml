@@ -1,0 +1,15 @@
+---
+selenium_hub_host: "null"
+selenium_hub_port: 4444
+
+browser_timeout: 300000
+throw_on_capability_not_present: true
+new_session_wait_timeout: -1
+capability_matcher: "com.ericsson.taf.selenium.capability.CustomCapabilityMatcher"
+prioritizer: "null"
+servlets: ["com.ericsson.taf.selenium.hub.proxy.HubRequestsProxyingServlet"]
+node_polling: 5000
+clean_up_cycle: 5000
+timeout: 300000
+max_session: 5
+jetty_max_threads: -1

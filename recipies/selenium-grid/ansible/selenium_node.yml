@@ -1,0 +1,27 @@
+---
+- name: Selenium Nodes
+  hosts: selenium-nodes
+  remote_user: "{{ remote_user }}"
+  sudo: yes
+  roles:
+    - role: selenium-common
+    - role: selenium-extension
+      selenium_extension_type: node
+    - role: selenium-x11
+    - role: selenium-firefox
+    - role: selenium-chrome
+    - role: selenium-node
+      selenium_node_id: 1
+      drivers:
+        - browser_name: firefox
+          max_instances: 5
+          sikuli_capability: false
+        - browser_name: chrome
+          max_instances: 5
+          sikuli_capability: false
+    - role: selenium-node
+      selenium_node_id: 2
+      drivers:
+        - browser_name: firefox
+          max_instances: 1
+          sikuli_capability: true

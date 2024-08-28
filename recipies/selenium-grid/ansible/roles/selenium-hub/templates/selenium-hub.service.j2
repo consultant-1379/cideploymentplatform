@@ -1,0 +1,12 @@
+[Unit]
+Description=Selenium Grid
+After=network.target
+
+[Service]
+ExecStart={{selenium_home}}/start-selenium-hub.sh
+User={{selenium_user}}
+Group={{selenium_group}}
+WorkingDirectory={{selenium_home}}
+
+[Install]
+WantedBy=multi-user.target
